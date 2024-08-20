@@ -1,9 +1,11 @@
+import time
+
 from obs.SmartFastField import SmartFastField
 import bot
 sff = SmartFastField()
 running = True
 isbot = False
-
+onlyBOT = False
 
 def printField():
     i = 1
@@ -42,15 +44,31 @@ while running:
         print("Das Spiel ist zu ende! ")
         break
 
-    if isbot and playerValue == 2:
-        if playerValue == 2:
-            print("BOT TURN")
-            mostLikedField = bot.mostLikedField(sff)
-            sff.insert(mostLikedField, playerValue)
+    if (isbot and playerValue == 2) or onlyBOT:
+        print("BOT TURN")
+        if onlyBOT:
+            time.sleep(0.5)
+
+        mostLikedField = bot.mostLikedField(sff, playerValue)
+        sff.insert(mostLikedField, playerValue)
+
+        if playerValue == 1:
+            playerValue = 2
+        elif playerValue == 2:
             playerValue = 1
+        else:
+            print("ERROR")
+
+
     else:
-        print("Die Zeile (oder 'exit'):")
-        inp = input()
+        try:
+            print("Die Zeile (oder 'exit'):")
+            inp = int(input())
+        except:
+            print("Da ist etwas schief gelaufen! Probiere es nochmal...")
+            break
+
+
         if inp == "exit":
             running = False
             break

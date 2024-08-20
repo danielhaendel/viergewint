@@ -28,10 +28,15 @@ def generateStarList(sff, fields):
     return stars
 
 
-def mostLikedField(sff):
+def mostLikedField(sff, playerValue):
     pointsList = {}
-    myValue = 2
-    gegnerValue = 1
+    myValue = playerValue
+    gegnerValue = 2
+    if myValue == 1:
+        gegnerValue = 2
+    elif myValue == 2:
+        gegnerValue = 1
+
     stars = generateStarList(sff, getPlayableFields(sff))
     for bigStar in stars:  # Geht alle Möglichen Felder durch
         key = bigStar.key
@@ -41,23 +46,23 @@ def mostLikedField(sff):
         for name, ar in star.items():  # Geht alle Felder in Umgebung durch
             # Möglicher Sieg
             if ar[0] == myValue and ar[1] == myValue and ar[2] == myValue:
-                points += 15
+                points += 500
 
             # Generischer möglicher Sieg
             if ar[0] == gegnerValue and ar[1] == gegnerValue and ar[2] == gegnerValue:
-                points += 13
+                points += 300
 
 
             # Gegner Blockt feld mit 2
             if (ar[0] == gegnerValue and ar[1] == gegnerValue) or (ar[1] == gegnerValue and ar[2] == gegnerValue):
-                points -= 4
+                points -= 6
             elif ar[0] == gegnerValue or ar[1] == gegnerValue or ar[2] == gegnerValue: # Gegner Blockt feld mit 1
                 points -= 2
 
 
             # 2 Steine in Folge # MAX 5
             if (ar[0] == myValue and ar[1] == myValue) or (ar[1] == myValue and ar[2] == myValue):
-                points += 5
+                points += 8
             elif ar[0] == myValue or ar[1] == myValue or ar[2] == myValue:     # 1 Stein in Folge
                 points += 4
 
@@ -84,5 +89,5 @@ def mostLikedField(sff):
             if points < p:
                 mostLikedKey = key
                 points = p
-
+    print(points)
     return mostLikedKey
